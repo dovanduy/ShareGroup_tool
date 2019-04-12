@@ -52,21 +52,22 @@ if (isset($_POST['login'])) {
 <?php include "layout/header.php"; ?>
 
 <!--Main Navigation-->
-<body>
+<body style="background: url('public/lib/images/background-blur-clean-531880.jpg')">
 <div class="container-fluid" style="height: 639px;">
     <div style="border: 2px solid #00dfff;border-radius: 10px;width: 50%;margin: 0 auto; color: white;margin-top: 10%;">
-        <h2 align="center" style="font-size:40px;text-shadow: 2px 2px #000101;font-weight: bold">Đăng nhập</h2>
         <br><br>
+        <h2 align="center" style="font-size:40px;text-shadow: 2px 2px #000101;font-weight: bold">Đăng nhập</h2>
+        <br>
         <form class="form-horizontal" method="post" style="width:80%;margin: 0 auto">
             <div class="form-group">
                 <label class="control-label col-sm-2" for="email">Tài khoản:</label>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <input type="text" class="form-control" name="user" id="email" placeholder="Nhập tài khoản">
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2" for="pwd">Mật khẩu:</label>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <input type="password" name="pass" class="form-control" id="pwd" placeholder="Nhập mật khẩu">
                 </div>
             </div>
@@ -82,14 +83,13 @@ if (isset($_POST['login'])) {
                 <button type="submit" name="login" class="btn btn-default">Đăng nhập</button>
             </center>
         </form>
+        <br><br>
     </div>
     <br><br>
 </div>
 </body>
 
 <?php include "layout/footer.php";
-echo "<pre>";
-var_dump($_SERVER);
 
 ?>
 

@@ -194,9 +194,43 @@ $(document).ready(function(){
                 $('#noidungsua').html(data);
             }
         );
+    });
+    //========== Change Info Acc ================
 
+    $('#change_info_acc').click(function(){
+        var pass1 = $('#password1').val();
+        var pass2 = $('#password2').val();
+        if (pass1 != pass2){
+            swal({
+                title: 'Mật khẩu không khớp',
+                icon: 'warning',
+                cancel: {
+                    text: 'Đóng',
+                    value: false,
+                },
+            })
+        }else {
+            swal({
+                title: 'Cập nhật thành công',
+                icon: 'success',
+                cancel: 'OK',
+            }).then(function() {
+                $.post(
+                    "include/change_info_acc_DB.php",
+                    {
+                        id: $('#id').val(),
+                        pass: $('#password1').val(),
+                        name: $('#name').val(),
+                    },
+                    function (data, status) {
+                        location.reload();
+                    }
+                );
+            });
+        }
 
     });
+
 
 
 });

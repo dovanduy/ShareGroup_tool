@@ -7,17 +7,19 @@
     <a class="logo-wrapper waves-effect" href="http://fb.com/QuangThienOfficial.VietNam" target="_blank">
         <img style="max-height: 100%;" src="<?php echo PATH; ?>/public/lib/images/logoFB-removebg.png" class="img-fluid" alt="">
     </a>
-
+    <center><h4>Xin chào <b><h3><?php echo $_SESSION['username'] ?></h3></b></h4></center>
     <div class="list-group list-group-flush" id="navbarSupportedContent">
         <a href="<?php echo PATH; ?>" class="list-group-item waves-effect <?php a("index.php"); ?>">
-            <i class="fas fa-chart-pie mr-3"></i>Home
+            <i class="fas fa-chart-pie mr-3"></i>Trang chủ
         </a>
         <a href="<?php echo PATH; ?>/get-token.php" class="list-group-item list-group-item-action waves-effect <?php a("get-token.php"); ?>">
             <i class="fas fa-key mr-3"></i>Get Token</a>
         <a href="<?php echo PATH; ?>/share-to-group.php" class="list-group-item list-group-item-action waves-effect <?php a("share-to-group.php"); ?>">
             <i class="fas fa-share mr-3"></i>Share Group</a>
+        <a href="<?php echo PATH; ?>/change_info_acc.php" class="list-group-item list-group-item-action waves-effect <?php a("change_info_acc.php"); ?>">
+            <i class="fas fa-user-alt mr-3"></i>Thông tin tài khoản</a>
         <a href="<?php echo PATH; ?>/logout.php" class="list-group-item list-group-item-action waves-effect <?php a("logout.php"); ?>">
-             <i class="fas fa-sign-out-alt mr-3"></i><?php echo $_SESSION['username'] ?>Log out</a>
+             <i class="fas fa-sign-out-alt mr-3"></i>Log out</a>
     </div>
 
 </div>
