@@ -10,11 +10,13 @@
 if (!isset($_SESSION)) {
     session_start();
 }
+
 if (!isset($_SESSION['username']) || $_SESSION['auth'] != 1){
     header("location: login.php");
 }
-include "config.php";
-include "include/Connection.php";
+
+include_once "config.php";
+include_once "include/Connection.php";
 $conn = getConnection();
 $query = mysqli_query($conn, "SELECT * FROM `user`");
 
@@ -72,10 +74,10 @@ $_SESSION['title'] = "Quản lý Người Dùng";
                     <?php } ?>
                     </tbody>
                 </table>
-                <center>
-                    <button type="button" class="btn btn-outline-dark waves-light waves-effect w-md" id="btn_add" title="Thêm Người Dùng"> <i class="fa fa-edit"></i>
-                    </button>
-                </center>
+               <div class="text-center">
+                   <button type="button" class="btn btn-outline-dark waves-light waves-effect w-md" id="btn_add" title="Thêm Người Dùng"> <i class="fa fa-edit"></i>
+                   </button>
+               </div>
 
                 <!--Modal Edit-->
                 <div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
