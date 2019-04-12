@@ -5,7 +5,7 @@
     </button>
 
     <a class="logo-wrapper waves-effect" href="http://fb.com/QuangThienOfficial.VietNam" target="_blank">
-        <img style="max-height: 100%;" src="<?php echo PATH; ?>/public/lib/images/logoFB-removebg.png" class="img-fluid" alt="">
+        <img style="max-height: 100%;" src="<?php echo PATH; ?>/public/images/logoFB-removebg.png" class="img-fluid" alt="">
     </a>
     <center><h4>Xin chào <b><h3><?php echo $_SESSION['username'] ?></h3></b></h4></center>
     <div class="list-group list-group-flush" id="navbarSupportedContent">

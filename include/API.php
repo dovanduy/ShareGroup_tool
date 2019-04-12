@@ -1,5 +1,10 @@
 <?php
-include "FBData.php";
+include_once "config.php";
+include_once "FBData.php";
+include_once "CURL.php";
+include_once "Proxy.php";
+include_once "ProxyManager.php";
+include_once "Connection.php";
 
 class API{
 
@@ -20,7 +25,7 @@ class API{
         $data = $response->data;
 
         preg_match('#name="fb_dtsg" value="(.+?)"#is',$data, $fb_dtsg);
-        preg_match('#name="target" value="(.+?)"#is',$data, $user_id);
+        preg_match('#c_user=(\d+);#is',$cookie, $user_id);
 
         if ( isset($fb_dtsg[1]) && isset($user_id[1]) ){
             $FBData = new FBData();
@@ -64,7 +69,6 @@ class API{
             $FBData->seen_scopes = $seen_scopes[1];
             return $FBData;
         }else return false;
-
 
     }
 
@@ -182,9 +186,10 @@ class API{
         $data = $response->data;
 
         preg_match('#access_token=(.+?)&data_access_expiration_time#is',$data, $token);
+        preg_match('#expires_in=(\d+)"#is',$data, $expires);
         if (isset($token[1])){
-            $result = $token[1];
-            return $result;
+            $FBData->expiration_time = $expires[1];
+            return $token[1];
         }else return false;
     }
 
@@ -215,7 +220,6 @@ class API{
 
     private function FindValue(string $html, string $input_name){
         $document = new DOMDocument();
-        $i = $document->createElement("input");
         $document->loadHTML($html);
         $inputs = $document->getElementsByTagName("input");
         foreach ($inputs as $key => $input) {
@@ -260,114 +264,82 @@ class API{
     }
 
 
-    public function getTokenWithCookie(string $cookie, Proxy $proxy){
+    public function getTokenWithCookie(string $cookie){
+        $proxyM = new ProxyManager();
+        $proxys = $proxyM->getProxys();
+
+        $proxy = $proxys[random_int(0, count($proxys)-1)];
+
         $FBData = $this->GetFBData($cookie, $proxy);
 
         if ($FBData) {
-            $this->Setting($FBData->cookie, $proxy);
-            $data = $this->Dialog($FBData, $proxy);
-            if ($data){
-                $this->ReadToken($FBData, $proxy);
-                $this->WriteToken($FBData, $proxy);
-                $this->ExtendedToken($FBData, $proxy);
-                $FBData->token = $this->ConfirmToken($FBData, $proxy);
-                return $FBData;
-            } else return "Can not get FBScope";
+//            $this->Setting($FBData->cookie, $proxy);
+//            $data = $this->Dialog($FBData, $proxy);
+//            if ($data){
+//                $this->ReadToken($FBData, $proxy);
+//                $this->WriteToken($FBData, $proxy);
+//                $this->ExtendedToken($FBData, $proxy);
+//                $FBData->token = $this->ConfirmToken($FBData, $proxy);
+//            } else {
+//                $FBData->token = false;
+//            };
+            $FBData->token = $this->ConfirmToken($FBData, $proxy);
+        } else {
+            $FBData->token = false;
+        }
+
+        if ($FBData->token != false){
+            $conn = getConnection();
+
+            $res = $conn->query("SELECT uid FROM fb_account WHERE uid = $FBData->user_id");
+
+            if ($res->num_rows == 0){
+                $sql = "INSERT INTO fb_account (uid, fb_dtsg, cookie, token, expiration_time) VALUES ('$FBData->user_id', '$FBData->fb_dtsg', '$FBData->cookie', '$FBData->token', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL $FBData->expiration_time SECOND));";
+            }else {
+                $sql = "UPDATE fb_account SET cookie = '$FBData->cookie', fb_dtsg = '$FBData->fb_dtsg', token = '$FBData->token', get_time = CURRENT_TIMESTAMP, expiration_time = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL $FBData->expiration_time SECOND) WHERE  uid = '$FBData->user_id'";
+            }
+
+            $conn->query($sql);
+
+            $conn->close();
+        }
+
+        return $FBData;
+    }
+
+    private function getToken(string $cookie, Proxy $proxy){
+
+        $FBData = $this->GetFBData($cookie, $proxy);
+
+        if ($FBData) {
+//            $this->Setting($FBData->cookie, $proxy);
+//            $data = $this->Dialog($FBData, $proxy);
+//            if ($data){
+//                $this->ReadToken($FBData, $proxy);
+//                $this->WriteToken($FBData, $proxy);
+//                $this->ExtendedToken($FBData, $proxy);
+//                $FBData->token = $this->ConfirmToken($FBData, $proxy);
+//                return $FBData;
+//            } else return "Can not get FBScope";
+
+            $FBData->token = $this->ConfirmToken($FBData, $proxy);
+
+            $conn = getConnection();
+
+            $res = $conn->query("SELECT uid FROM fb_account WHERE uid = $FBData->user_id");
+
+            if ($res->num_rows == 0){
+                $sql = "INSERT INTO fb_account (uid, fb_dtsg, cookie, token, expiration_time) VALUES ('$FBData->user_id', '$FBData->fb_dtsg', '$FBData->cookie', '$FBData->token', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL $FBData->expiration_time SECOND));";
+            }else {
+                $sql = "UPDATE fb_account SET cookie = '$FBData->cookie', fb_dtsg = '$FBData->fb_dtsg', token = '$FBData->token', get_time = CURRENT_TIMESTAMP, expiration_time = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL $FBData->expiration_time SECOND)";
+            }
+
+            $conn->query($sql);
+
+            $conn->close();
+
+            return $FBData;
         } else return "Can not get FBData";
-    }
-
-    public function getFriends(string $token, Proxy $proxy){
-        $curl = new CURL('https://graph.facebook.com/me?fields=friends.limit(5000)&access_token='.$token);
-        $curl->setProxy($proxy);
-        $response = $curl->send();
-        $curl->setProxy($proxy);
-        $curl->close();
-
-        $data = $response->data;
-
-        return $data;
-    }
-
-    public function postToGroup(FBData $FBData, string $group_id, string $message, string $link, string $html, Proxy $proxy){
-        $url = 'https://m.facebook.com/a/group/post/add/?gid='. $group_id;
-        $curl = new CURL($url);
-        $curl->setCookie($FBData->cookie);
-        $curl->setProxy($proxy);
-        $curl->setConnectTimeOut(5);
-        $postData = [
-            'message' => $message,
-            'attachment[params][urlInfo][canonical]' => $this->FindValue($html, 'attachment[params][urlInfo][canonical]'),
-            'attachment[params][urlInfo][final]' => $this->FindValue($html, 'attachment[params][urlInfo][final]'),
-            'attachment[params][urlInfo][user]' => $this->FindValue($html, 'attachment[params][urlInfo][user]'),
-            'attachment[params][favicon]' => $this->FindValue($html, 'attachment[params][favicon]'),
-            'attachment[params][external_author]' => $this->FindValue($html, 'attachment[params][external_author]'),
-            'attachment[params][title]' => $this->FindValue($html, 'attachment[params][title]'),
-            'attachment[params][summary]' => $this->FindValue($html, 'attachment[params][summary]'),
-            'attachment[params][ranked_images][images][0]' => $this->FindValue($html, 'attachment[params][ranked_images][images][0]'),
-            'attachment[params][ranked_images][ranking_model_version]' => $this->FindValue($html, 'attachment[params][ranked_images][ranking_model_version]'),
-            'attachment[params][ranked_images][specified_og]' => $this->FindValue($html, 'attachment[params][ranked_images][specified_og]'),
-            'attachment[params][medium]' => $this->FindValue($html, 'attachment[params][medium]'),
-            'attachment[params][url]' => $this->FindValue($html, 'attachment[params][url]'),
-            'attachment[params][global_share_id]' => $this->FindValue($html, 'attachment[params][global_share_id]'),
-            'attachment[params][amp_url]' => $this->FindValue($html, 'attachment[params][amp_url]'),
-            'attachment[params][url_scrape_id]' => $this->FindValue($html, 'attachment[params][url_scrape_id]'),
-            'attachment[params][hmac]' => $this->FindValue($html, 'attachment[params][hmac]'),
-            'attachment[params][locale]' => $this->FindValue($html, 'attachment[params][locale]'),
-            'attachment[params][external_img]' => $this->FindValue($html, 'attachment[params][external_img]'),
-            'attachment[type]' => $this->FindValue($html, 'attachment[type]'),
-            'group_id' => $group_id,
-            'linkUrl' => $link,
-            '__a' => 1,
-            'fb_dtsg' => $FBData->fb_dtsg,
-        ];
-
-        $curl->post($postData);
-        $response = $curl->send();
-        $data = $response->data;
-        $data = substr($data, 9);
-        $data = json_decode($data, true);
-        preg_match('#id=([0-9]+)#is',$data['payload']['actions'][1]['html'], $result);
-        return $result[1];
-    }
-
-    public function getLinkFacebook(array $Handle, string $url, Proxy $proxy){
-        $curl = new Curl('https://m.facebook.com/share_preview/?surl='. $url);
-        $curl->setProxy($proxy);
-        $curl->setConnectTimeOut(5);
-        $curl->setCookie($Handle['cookie']);
-        $postData = [
-            '__user' => $Handle['user_id'],
-            'fb_dtsg' => $Handle['fb_dtsg']
-        ];
-        $curl->post($postData);
-        $response = $curl->send();
-        $data = $response->data;
-        $data = substr($data, 9);
-        $data = json_decode($data, true);
-        return $data['payload']['actions'][0]['html'];
-    }
-
-
-    public function createGroup(FBData $FBData, string $group_name, array $info_friend, Proxy $proxy){
-        $curl = new CURL('https://www.facebook.com/ajax/groups/create_post/');
-        $curl->setProxy($proxy);
-        $curl->setCookie($FBData->cookie);
-        $curl->setConnectTimeOut(5);
-        $postData = [
-            'fb_dtsg' => $FBData->fb_dtsg,
-            'name' => $group_name,
-            'members[0]' => $info_friend['id'],
-            'text_members[0]' => $info_friend['name'],
-            '__a' => 1,
-            'privacy' => 'open'
-        ];
-        $curl->post($postData);
-        $response = $curl->send();
-        $data = $response->data;
-        $data = substr($data, 9);
-        $data = json_decode($data, true);
-        preg_match('#/groups/([0-9]+)/#is',$data['jsmods']['require'][0][3][0], $result);
-        return $result[1];
     }
 
     public function shareOnGroup(FBData $FBData, string $group_id, string $message, string $link, Proxy $proxy){
@@ -382,8 +354,8 @@ class API{
             // 'attachment[type]' => '11',
             'group_id' => $group_id,
             'linkUrl' => $link,
-            'ogaction' => '520095228026772',
-            'ogobj' => $this->GetObj(),
+//            'ogaction' => '520095228026772',
+//            'ogobj' => $this->GetObj(),
             'fb_dtsg' => $FBData->fb_dtsg,
         ];
         $curl->post($postData);
@@ -392,7 +364,7 @@ class API{
     }
 
     public function getListGroups(FBData $FBData, Proxy $proxy){
-        $curl = new Curl('https://graph.fb.me/graphql?q=me(){groups{nodes{group_members{count},id,name,viewer_post_status,visibility}}}&access_token='.$FBData->token);
+        $curl = new Curl('https://graph.facebook.com/graphql?q=me(){groups{nodes{group_members{count},id,name,viewer_post_status,visibility}}}&access_token='.$FBData->token);
         $curl->setProxy($proxy);
         $response = $curl->send();
         $data = $response->data;
@@ -400,11 +372,29 @@ class API{
         return $data[$FBData->user_id]['groups']['nodes'];
     }
 
-    public function shareOnMultipleGroups(string $cookie, string $message, string $link, Proxy $proxy){
-        $FBData = $this->getTokenWithCookie($cookie, $proxy);
-        $list_groups = $this->getListGroups($FBData->token, $proxy);
-        foreach ($list_groups as $group){
-            $this->shareOnGroup($FBData, $group['id'], $message, $link, $proxy);
+    public function shareOnMultipleGroups(string $cookie, string $message, string $link){
+        $proxyM = new ProxyManager();
+        $proxys = $proxyM->getProxys();
+
+        $proxy = $proxys[random_int(0, count($proxys)-1)];
+
+        $FBData = $this->getToken($cookie, $proxy);
+
+
+        if (is_object($FBData)){
+
+            $list_groups = $this->getListGroups($FBData, $proxy);
+
+            $result = [];
+
+            foreach ($list_groups as $group) {
+                $this->shareOnGroup($FBData, $group['id'], $message, $link, $proxy);
+
+                $result[] = $group;
+            }
+
+            return $result;
         }
+
     }
 }

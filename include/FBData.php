@@ -6,6 +6,7 @@ class FBData
     public $fb_dtsg;
     public $cookie;
     public $token;
+    public $expiration_time;
     public $read;
     public $write;
     public $extended;

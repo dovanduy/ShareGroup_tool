@@ -1,5 +1,5 @@
 <?php
-include "HttpResponse.php";
+include_once "HttpResponse.php";
 
 const HTTP = 0;
 const HTTP1_0 = 1;
@@ -146,7 +146,7 @@ class CURL
         $this->setAutoReferer(true);
         $this->setProxyType(HTTP);
         $this->setHeaderOut(true);
-        $this->setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36");
+        $this->setUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36");
         $this->setConnectTimeOut(10);
         $this->setTimeOut(30);
     }

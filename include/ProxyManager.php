@@ -1,4 +1,6 @@
 <?php
+include_once "Connection.php";
+include_once "Proxy.php";
 
 class ProxyManager
 {
@@ -54,6 +56,7 @@ class ProxyManager
 
         $conn->query($sql);
 
+        $conn->close();
 
         if ($added == 0) {
             return $conn->error;
@@ -61,7 +64,6 @@ class ProxyManager
             return $added;
         }
 
-        $conn->close();
     }
 
 }

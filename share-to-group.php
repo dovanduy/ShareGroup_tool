@@ -1,29 +1,23 @@
 <?php
-include "config.php";
+include_once "config.php";
 
 if (!isset($_SESSION)) {
     session_start();
 }
-if (!isset($_SESSION['username'])){
-    header("location: login.php");
-}
 
 $_SESSION['title'] = "Share Group";
 
-//$auth = new Authenticate();
-//$auth->login("", "");
-//$auth->checkAuth();
+if (!isset($_SESSION['username'])) {
+    header("location: login.php");
+}
 
-if (true) {
-    include "layout/header.php";
-    ?>
+?>
 
     <!--Main Navigation-->
     <header>
         <?php
-        if (isset($_SESSION['auth']) && $_SESSION['auth'] == 1){
-            include "layout/navbar.php";
-        }
+        include "layout/header.php";
+        include "layout/navbar.php";
         include "layout/sidebar.php";
         ?>
     </header>
@@ -35,31 +29,32 @@ if (true) {
             <div class="py-5">
                 <div class="mb-5">
                     <div class="form-group">
-                        <label for="in_cookie">Cookie</label>
-                        <textarea id="in_cookie" class="form-control mb-1" rows="5"></textarea>
+                        <label for="inCookie">Danh sách cookie</label>
+                        <textarea id="inCookie" class="form-control mb-1" rows="5" placeholder="Dán danh sách cookie vào đây"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="in_message">Message</label>
-                        <input id="in_message" type="text" class="form-control">
+                        <label for="inMessage">Message</label>
+                        <input id="inMessage" type="text" class="form-control">
                     </div>
 
                     <div class="form-group">
-                        <label for="in_message">Link</label>
-                        <input id="in_link" type="text" class="form-control">
+                        <label for="inLink">Link</label>
+                        <input id="inLink" type="text" class="form-control">
                     </div>
 
-                    <button class="btn btn-primary d-block mt-4" onclick="runShareGroup()">Get Token</button>
+                    <button id="btnShareGroup" class="btn btn-primary d-block mt-4">Chia sẻ</button>
                 </div>
 
-                <h2>List Result</h2>
-                <table id="tb_result" class="table table-bordered">
+                <h2>Đã thực hiện</h2>
+                <table id="tblResult" class="table table-bordered">
                     <thead>
                     <tr>
                         <th>STT</th>
-                        <th>Token</th>
-                        <th>IP</th>
-                        <th>Proxy</th>
+                        <th>Group ID</th>
+                        <th>Group Name</th>
+                        <th>Viewer Post Status</th>
+                        <th>Visibility</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -71,7 +66,6 @@ if (true) {
     </main>
     <!--Main layout-->
 
-    <?php
-    include "layout/footer.php";
-}
+<?php
+include "layout/footer.php";
 ?>

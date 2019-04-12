@@ -1,69 +1,149 @@
-function runGetToken() {
+var promise = [];
+var count = 0;
 
-    var cookie = $('#in_cookie').val().trim();
+var btnGetToken = $('#btnGetToken');
 
-    var resultElement = $('#tb_result tbody')[0];
+btnGetToken.click(function () {
+    var listCookie = $('#in_cookie').val().trim();
 
-    if (cookie.length != 0) {
+
+    if (listCookie.length != 0) {
+        var arrCookie = listCookie.split('\n');
+
+        var i = 1;
+        btnGetToken.attr('disabled', 'disabled');
+        var stt = 'Đang lấy token ';
+        var time = setInterval(function(){
+            stt += '.'
+            if (i % 5 == 0){
+                stt = 'Đang lấy token ';
+            }
+            btnGetToken.html(stt);
+            i++;
+        }, 1000);
+
+        for (i in arrCookie){
+            promise.push(getToken(arrCookie[i]));
+        }
+
+        Promise.all(promise).then(function () {
+            clearInterval(time);
+            btnGetToken.html("Lấy Token");
+            btnGetToken.removeAttr('disabled');
+            alert("Hoàn thành\n"+count+" tài khoản đã lấy được token");
+        });
+
+    } else {
+        alert("Danh sách cookie rỗng");
+    }
+});
+
+var btnShareGroup = $('#btnShareGroup');
+
+btnShareGroup.click(function () {
+    var listCookie = $('#inCookie').val().trim();
+    var mess = $('#inMessage').val().trim();
+    var link = $('#inLink').val().trim();
+
+    if (listCookie.length != 0) {
+
+        var i = 1;
+        btnShareGroup.attr('disabled', 'disabled');
+        var stt = 'Đang chia sẻ ';
+        var time = setInterval(function(){
+            stt += '.'
+            if (i % 5 == 0){
+                stt = 'Đang chia sẻ ';
+            }
+            btnShareGroup.html(stt);
+            i++;
+        }, 1000);
+
+        var arrCookie = listCookie.split('\n');
+
+        for (i in arrCookie){
+            promise.push(shareGroup(arrCookie[i], mess, link));
+        }
+
+        Promise.all(promise).then(function () {
+            clearInterval(time);
+            btnShareGroup.html("Chia sẻ");
+            btnShareGroup.removeAttr('disabled');
+            alert("Hoàn thành\nĐã chia sẻ lên "+count+" group");
+        }, function () {
+            clearInterval(time);
+            btnShareGroup.html("Chia sẻ");
+            btnShareGroup.removeAttr('disabled');
+            alert("Hoàn thành");
+        });
+
+    }else {
+        alert("Danh sách cookie rỗng");
+    }
+
+});
+
+function getToken(cookie) {
+    return new Promise(function (resolve, reject) {
         $.post("ajax.php", {
             request: "get_token",
             cookie: cookie
         }, function (res) {
-            console.log(res);
             try {
                 res = JSON.parse(res);
-            }catch (e) {
-                console.log(e.message);
+                resolve(res);
+            } catch (e) {
+                reject();
             }
-
-            ReactDOM.render(
-                <Row data={res} />
-                , resultElement
-            );
         });
-    } else {
-        alert("Nhập cookie");
-    }
+    }).then(function (res) {
+        if (res.token != false){
+            var row = createTableRow([++count, res.uid, res.token]);
+            var tblResult = $('#tblResult tbody')[0];
+            tblResult.appendChild(row);
+        }
+    }).catch(function () {
 
+    });
 }
 
-function runShareGroup() {
-    var cookie = $('#in_cookie').val().trim();
-    var mess = $('#in_message').val().trim();
-    var link = $('#in_link').val().trim();
+function shareGroup(cookie, mess, link){
+    return new Promise(function (resolve, reject) {
+        $.post(
+            "ajax.php",{
+                request: "share_group",
+                cookie : cookie,
+                message: mess,
+                link: link
+            },
+            function (res) {
+                try {
+                    res = JSON.parse(res);
+                    resolve(res);
+                }catch (e) {
+                    reject();
+                }
+            }
+        );
+    }).then(function (res) {
+        for (i in res){
+            var row = createTableRow([++count, res[i].id, res[i].name, res[i].viewer_post_status, res[i].visibility]);
+            var tblResult = $('#tblResult tbody')[0];
+            tblResult.appendChild(row);
+        }
+    }).catch(function (val) {
 
-    var resultElement = $('#tb_result tbody')[0];
-
-    if (cookie.length != 0) {
-        $.post(PATH+"/api/share-to-group", {
-            request: "get_token",
-            cookie: cookie,
-            message: mess,
-            link: link
-        }, function (res) {
-            console.log(res);
-        });
-    } else {
-        alert("Nhập cookie");
-    }
+    });
 }
 
+function createTableRow(cols) {
+    var tr = document.createElement("tr");
+    for (i in cols) {
+        var td = document.createElement("td");
+        td.innerHTML = cols[i];
+        tr.appendChild(td);
+    }
 
-
-
-//React Component
-const Row = function (props) {
-    var style = {
-        wordBreak: 'break-all'
-    };
-
-    return (
-        <tr>
-            <td></td>
-            <td style={style}>{props.data.token}</td>
-            <td>{props.data.ip}</td>
-            <td>{props.data.proxy.ip_address + ":" + props.data.proxy.port}</td>
-        </tr>
-    );
+    return tr;
 }
 

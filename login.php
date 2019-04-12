@@ -52,7 +52,7 @@ if (isset($_POST['login'])) {
 <?php include "layout/header.php"; ?>
 
 <!--Main Navigation-->
-<body style="background: url('public/lib/images/background-blur-clean-531880.jpg')">
+<body style="background: url('public/images/background-blur-clean-531880.jpg')">
 <div class="container-fluid" style="height: 639px;">
     <div style="border: 2px solid #00dfff;border-radius: 10px;width: 50%;margin: 0 auto; color: white;margin-top: 10%;">
         <br><br>

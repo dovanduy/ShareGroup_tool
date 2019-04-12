@@ -231,21 +231,21 @@ $(document).ready(function(){
     });
 
     $('button#logout').click(function () {
-        swal({
-            text: 'Đăng xuất thành công',
-            title: 'Hẹn gặp lại',
-            icon: 'success',
-            confirm: 'OK',
-        }).then(function() {
-            $.post(
-                "include/logout.php",
+        $.post(
+            "logout.php",
+            function () {
+                swal({
+                    text: 'Đăng xuất thành công',
+                    title: 'Hẹn gặp lại',
+                    icon: 'success',
+                    confirm: 'OK',
+                }).then(function() {
+                    location.reload();
+                });
+            }
+        );
 
-            )
-            location.reload();
-        })
-    })
-
-
+    });
 
 });
 

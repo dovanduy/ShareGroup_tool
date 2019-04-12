@@ -9,6 +9,7 @@
 if (!isset($_SESSION)){
     session_start();
 }
+
 session_destroy();
 unset($_SESSION['username']);
 unset($_SESSION['password']);
