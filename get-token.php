@@ -28,13 +28,13 @@ if (!isset($_SESSION['username'])) {
         <div class="py-5">
             <div class="mb-5">
                 <div class="form-group">
-                    <label for="in_cookie">Cookie</label>
-                    <textarea id="in_cookie" class="form-control mb-1" rows="5"></textarea>
+                    <label for="in_cookie">Danh sách cookie</label>
+                    <textarea id="in_cookie" class="form-control mb-1" rows="5" placeholder="Dán danh sách cookie vào đây"></textarea>
                 </div>
                 <button id="btnGetToken" class="btn btn-primary d-block mt-4">Lấy Token</button>
             </div>
 
-            <h2>List Result</h2>
+            <h2>Đã thực hiện</h2>
             <table id="tblResult" class="table table-bordered">
                 <thead>
                 <tr>
