@@ -18,8 +18,8 @@
             <i class="fas fa-share mr-3"></i>Share Group</a>
         <a href="<?php echo PATH; ?>/change_info_acc.php" class="list-group-item list-group-item-action waves-effect <?php a("change_info_acc.php"); ?>">
             <i class="fas fa-user-alt mr-3"></i>Thông tin tài khoản</a>
-        <a href="<?php echo PATH; ?>/logout.php" class="list-group-item list-group-item-action waves-effect <?php a("logout.php"); ?>">
-             <i class="fas fa-sign-out-alt mr-3"></i>Log out</a>
+        <button type="button" class="list-group-item list-group-item-action waves-effect" id="logout">
+             <i class="fas fa-sign-out-alt mr-3"></i>Đăng xuất</button>
     </div>
 
 </div>

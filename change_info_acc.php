@@ -30,6 +30,9 @@ include "layout/header.php";
     <?php
     if (isset($_SESSION['auth']) && $_SESSION['auth'] == 1){
         include "layout/navbar.php";
+        $disable = "";
+    }else{
+        $disable = "disabled";
     }
     include "layout/sidebar.php";
     ?>
@@ -50,7 +53,7 @@ include "layout/header.php";
                 <input type="text" value="<?php echo $row['id']?>" id="id" hidden>
                 <div class="card-body px-lg-5 pt-0">
                     <label for="exampleForm2">Tài khoản</label>
-                    <input type="text" id="user" name="user" class="form-control" value="<?php echo $row['user']?>" required disabled>
+                    <input type="text" id="user" name="user" class="form-control" value="<?php echo $row['user']?>" required <?php echo $disable?>>
                 </div>
                 <div class="card-body px-lg-5 pt-0">
                     <label for="exampleForm2">Mật khẩu</label>

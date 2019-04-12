@@ -1,6 +1,10 @@
 <!--Footer-->
-<footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn">
-
+<footer class="page-footer font-medium blue fixed-bottom">
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3" style="color: white">
+        © 2018 Copyright: Quang Thien - Design and Developed by PN Team.
+    </div>
+    <!-- Copyright -->
 </footer>
 <!--/.Footer-->
 <script type="text/javascript" src="<?php echo PATH; ?>/public/lib/reactjs/react.production.min.js"></script>
