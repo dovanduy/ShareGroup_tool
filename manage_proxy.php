@@ -36,7 +36,7 @@ include "layout/header.php";
     <main id="root" class="pt-5 mx-lg-5">
         <div class="main-content">
             <div class="py-5">
-                <table class="table table-striped">
+                <table class="table table-hover">
                     <thead class="black white-text">
                     <tr>
                         <th scope="col">ID</th>
