@@ -126,6 +126,23 @@ $(document).ready(function(){
         });
     });
 
+    $('#btn_add_proxy').click(function(){
+        $('#ModalAddProxy').modal();
+    });
+
+    $('#add_proxy').click(function(){
+        $.post(
+            "include/process_proxy_DB.php",
+            {
+                option: "add_proxy",
+                proxy: $('#proxy').val(),
+            },
+            function(){
+                location.reload();
+            }
+        );
+    });
+
     $('#update_proxy').click(function(){
         var data = $('#myModalLabel').attr('up_add');
         $.post(
@@ -177,22 +194,42 @@ $(document).ready(function(){
         });
     });
 
-
-    $('#btn_add_proxy').click(function(){
-        $('#ModalEditProxy').modal();
-        $('#myModalLabel').text('THÊM PROXY');
-        $('button#update').text('THÊM PROXY');
-        $('#myModalLabel').attr('up_add', 'add');
-        $.post(
-            "include/option_proxy.php",
-            {
-                type: 'add'
+    $('button#btn_del_all_proxy').click(function(event) {
+        swal({
+            title: "Bạn có chắc muốn xoá Hết Proxy ?",
+            icon: 'warning',
+            buttons: {
+                confirm: {
+                    text: "Đồng ý",
+                    value: true,
+                    visible: true,
+                    // className: "btn btn-success",
+                },
+                cancel: {
+                    text: "Huỷ",
+                    value: false,
+                    visible: true,
+                    // className: "btn btn-danger m-l-10",
+                    closeModal: true,
+                },
             },
-            function(data, status){
-                $('#noidungsua').html(data);
+        }).then(function(result){
+            if (result) {
+                $.post(
+                    "include/process_proxy_DB.php",
+                    {
+                        option: 'del_all',
+                    },
+                    function(data, status){
+                        location.reload();
+                    }
+                )
             }
-        );
+        });
     });
+
+
+
     //========== Change Info Acc ================
 
     $('#change_info_acc').click(function(){
