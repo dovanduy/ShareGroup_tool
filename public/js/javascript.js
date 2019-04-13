@@ -34,13 +34,6 @@ $(document).ready(function(){
                 pass: $('#pass').val(),
                 name: $('#name').val(),
                 ip_address: $('#ip_address').val(),
-                // tag: $('#tag').val(),
-                // tagNoFr: $('#tagNoFr').val(),
-                // getToken: $('#getToken').val(),
-                // postPasG: $('#postPasG').val(),
-                // postP: $('#postP').val(),
-                // joinG: $('#joinG').val(),
-                // postG: $('#postG').val()
             },
             function(data, status){
                 location.reload();
@@ -74,17 +67,20 @@ $(document).ready(function(){
 			// confirmButtonClass: 'btn btn-success',
 			// cancelButtonClass: 'btn btn-danger m-l-10',
 			// buttonsStyling: false
-		}).then(function(){
-			$.post(
-				"include/process_user_DB.php",
-				{
-                    option: 'del',
-					id: id_user
-				},
-				function(data, status){
-					location.reload();
-				}
-			)
+		}).then(function(result){
+		    // console.log(result);
+		     if (result) {
+                 $.post(
+                     "include/process_user_DB.php",
+                     {
+                         option: 'del',
+                         id: id_user
+                     },
+                     function(data, status){
+                         location.reload();
+                     }
+                 )
+             }
 		});
 	});
 
@@ -165,17 +161,19 @@ $(document).ready(function(){
                     closeModal: true,
                 },
             },
-        }).then(function(){
-            $.post(
-                "include/process_proxy_DB.php",
-                {
-                    option: 'del',
-                    id: id
-                },
-                function(data, status){
-                    location.reload();
-                }
-            )
+        }).then(function(result){
+           if (result) {
+               $.post(
+                   "include/process_proxy_DB.php",
+                   {
+                       option: 'del',
+                       id: id
+                   },
+                   function(data, status){
+                       location.reload();
+                   }
+               )
+           }
         });
     });
 

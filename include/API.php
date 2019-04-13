@@ -1,10 +1,10 @@
 <?php
-include_once "config.php";
 include_once "FBData.php";
 include_once "CURL.php";
 include_once "Proxy.php";
 include_once "ProxyManager.php";
 include_once "Connection.php";
+include_once "Logger.php";
 
 class API{
 
@@ -380,6 +380,7 @@ class API{
 
         $FBData = $this->getToken($cookie, $proxy);
 
+        $logger = new Logger("log.log");
 
         if (is_object($FBData)){
 
@@ -391,6 +392,8 @@ class API{
                 $this->shareOnGroup($FBData, $group['id'], $message, $link, $proxy);
 
                 $result[] = $group;
+
+                $logger->log($FBData->user_id . "    " . $group['id']);
             }
 
             return $result;
