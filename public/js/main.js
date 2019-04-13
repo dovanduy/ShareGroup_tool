@@ -120,7 +120,6 @@ function shareGroup(cookie, mess, link, limit){
                 limit: limit
             },
             function (res) {
-                console.log(res);
                 try {
                     res = JSON.parse(res);
                     resolve(res);
