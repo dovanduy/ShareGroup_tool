@@ -380,7 +380,7 @@ class API{
         return $data[$FBData->user_id]['groups']['nodes'];
     }
 
-    public function shareOnMultipleGroups(string $cookie, string $message, string $link, int $limit){
+    public function shareOnMultipleGroups(string $cookie, string $message, string $link, int $limit = NULL){
         $proxyM = new ProxyManager();
         $proxys = $proxyM->getProxys();
 
@@ -404,7 +404,7 @@ class API{
                     $logger->log($FBData->user_id." => (".count($result).") ".$group['id']);
                 }
 
-                if (count($result) >= $limit) {
+                if ($limit != NULL && $limit != 0 && count($result) >= $limit) {
                     break;
                 }
             }
