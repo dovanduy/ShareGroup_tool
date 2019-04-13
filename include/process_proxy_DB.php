@@ -16,13 +16,25 @@ if (!isset($_SESSION['username']) || $_SESSION['auth'] != '1'){
     require_once '../config.php';
     require_once 'Connection.php';
     $conn = getConnection();
-if ($_POST['option'] == 'up'){
-    mysqli_query($conn,"UPDATE `list_proxy` SET `proxy` = '".$_POST['proxy']."' WHERE id = '".$_POST['id']."' ");
 
-}else if($_POST['option'] == 'add'){
-    mysqli_query($conn,"INSERT INTO list_proxy SET `proxy`='".$_POST['proxy']."'");
-}else if($_POST['option'] == 'del'){
-    mysqli_query($conn,"DELETE FROM `list_proxy` WHERE id = '".$_POST['id']."'");
+
+if (isset($_POST['option'])){
+    $flag = $_POST['option'];
+    switch ($flag){
+        case "del_all":
+            mysqli_query($conn,"DELETE FROM `list_proxy`");
+            break;
+        case "up":
+            mysqli_query($conn,"UPDATE `list_proxy` SET `proxy` = '".$_POST['proxy']."' WHERE id = '".$_POST['id']."' ");
+            break;
+        case "add_proxy":
+            mysqli_query($conn,"INSERT INTO list_proxy SET `proxy`='".$_POST['proxy']."'");
+            break;
+        case "del":
+            mysqli_query($conn,"DELETE FROM `list_proxy` WHERE id = '".$_POST['id']."'");
+            break;
+    }
 }
+
 
  ?>

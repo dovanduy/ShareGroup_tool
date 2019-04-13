@@ -36,11 +36,12 @@ include "layout/header.php";
     <main id="root" class="pt-5 mx-lg-5">
         <div class="main-content">
             <div class="py-5">
+                <button type="button" class="btn btn-icon waves-effect waves-light btn-danger" id="btn_del_all_proxy" title="Xoá" style="float: right"> Xoá Toàn Bộ</button>
                 <table class="table table-hover">
                     <thead class="black white-text">
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Proxy</th>
+                        <th scope="col">Danh sách Proxy</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
@@ -79,6 +80,31 @@ include "layout/header.php";
                             </div>
                             <div class="modal-footer">
                                 <button type="button" id="update_proxy" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Add Proxy-->
+                <div class="modal fade" id="ModalAddProxy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="myModalLabel" >Thêm Proxy</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Danh sách Proxy</label>
+                                    <textarea class="form-control rounded-0" id="proxy" rows="10"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="add_proxy" class="btn btn-primary">Thêm</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                             </div>
                         </div>
