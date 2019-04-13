@@ -38,12 +38,14 @@ btnGetToken.click(function () {
     }
 });
 
+
 var btnShareGroup = $('#btnShareGroup');
 
 btnShareGroup.click(function () {
     var listCookie = $('#inCookie').val().trim();
     var mess = $('#inMessage').val().trim();
     var link = $('#inLink').val().trim();
+    var limit = $('#inLimit').val().trim();
 
     if (listCookie.length != 0) {
 
@@ -62,7 +64,7 @@ btnShareGroup.click(function () {
         var arrCookie = listCookie.split('\n');
 
         for (i in arrCookie){
-            promise.push(shareGroup(arrCookie[i], mess, link));
+            promise.push(shareGroup(arrCookie[i], mess, link, limit));
         }
 
         Promise.all(promise).then(function () {
@@ -107,16 +109,18 @@ function getToken(cookie) {
     });
 }
 
-function shareGroup(cookie, mess, link){
+function shareGroup(cookie, mess, link, limit){
     return new Promise(function (resolve, reject) {
         $.post(
             "ajax.php",{
                 request: "share_group",
                 cookie : cookie,
                 message: mess,
-                link: link
+                link: link,
+                limit: limit
             },
             function (res) {
+                console.log(res);
                 try {
                     res = JSON.parse(res);
                     resolve(res);

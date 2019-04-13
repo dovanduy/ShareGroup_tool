@@ -343,24 +343,32 @@ class API{
     }
 
     public function shareOnGroup(FBData $FBData, string $group_id, string $message, string $link, Proxy $proxy){
-        $curl = new Curl('https://m.facebook.com/a/group/post/add/?gid='.$group_id);
-        $curl->setCookie($FBData->cookie);
-        $curl->setProxy($proxy);
-        $curl->setConnectTimeOut(5);
-        $postData = [
-            'rating' => '0',
-            'message' => $message,
-            // 'attachment[params][0]' => '2168132523497904',
-            // 'attachment[type]' => '11',
-            'group_id' => $group_id,
-            'linkUrl' => $link,
-//            'ogaction' => '520095228026772',
-//            'ogobj' => $this->GetObj(),
-            'fb_dtsg' => $FBData->fb_dtsg,
-        ];
-        $curl->post($postData);
-        $response = $curl->send();
-        return $response;
+        try{
+            $curl = new Curl('https://m.facebook.com/a/group/post/add/?gid='.$group_id);
+            $curl->setCookie($FBData->cookie);
+            $curl->setProxy($proxy);
+            $curl->setConnectTimeOut(5);
+            $postData = [
+                'rating' => '0',
+                'message' => $message,
+                // 'attachment[params][0]' => '2168132523497904',
+                // 'attachment[type]' => '11',
+                'group_id' => $group_id,
+                'linkUrl' => $link,
+                'ogaction' => '520095228026772',
+                'ogobj' => $this->GetObj(),
+                'fb_dtsg' => $FBData->fb_dtsg,
+            ];
+            $curl->post($postData);
+            $response = $curl->send();
+            if ($response->data != ""){
+                return true;
+            }else {
+                return false;
+            }
+        } catch (Exception $e){
+            return false;
+        }
     }
 
     public function getListGroups(FBData $FBData, Proxy $proxy){
@@ -372,7 +380,7 @@ class API{
         return $data[$FBData->user_id]['groups']['nodes'];
     }
 
-    public function shareOnMultipleGroups(string $cookie, string $message, string $link){
+    public function shareOnMultipleGroups(string $cookie, string $message, string $link, int $limit){
         $proxyM = new ProxyManager();
         $proxys = $proxyM->getProxys();
 
@@ -389,11 +397,16 @@ class API{
             $result = [];
 
             foreach ($list_groups as $group) {
-                $this->shareOnGroup($FBData, $group['id'], $message, $link, $proxy);
 
-                $result[] = $group;
+                $res = $this->shareOnGroup($FBData, $group['id'], $message, $link, $proxy);
+                if ($res){
+                    $result[] = $group;
+                    $logger->log($FBData->user_id." => (".count($result).") ".$group['id']);
+                }
 
-                $logger->log($FBData->user_id . "    " . $group['id']);
+                if (count($result) >= $limit) {
+                    break;
+                }
             }
 
             return $result;

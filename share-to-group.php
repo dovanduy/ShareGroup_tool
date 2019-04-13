@@ -43,6 +43,11 @@ if (!isset($_SESSION['username'])) {
                         <input id="inLink" type="text" class="form-control">
                     </div>
 
+                    <div class="form-group">
+                        <label for="inLink">Giới hạn</label>
+                        <input id="inLimit" type="number" class="form-control">
+                    </div>
+
                     <button id="btnShareGroup" class="btn btn-primary d-block mt-4">Chia sẻ</button>
                 </div>
 
