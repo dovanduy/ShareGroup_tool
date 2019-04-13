@@ -16,7 +16,8 @@ if (!isset($_SESSION['username'])) {
 <header>
     <?php
     include "layout/header.php";
-    include "layout/navbar.php";
+if (isset($_SESSION['auth']) && $_SESSION['auth'] == 1){
+    include "layout/navbar.php";}
     include "layout/sidebar.php";
     ?>
 </header>
