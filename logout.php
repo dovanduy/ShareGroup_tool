@@ -15,4 +15,6 @@ unset($_SESSION['username']);
 unset($_SESSION['password']);
 unset($_SESSION['auth']);
 unset($_SESSION['title']);
+unset($_SESSION['name']);
+
 header('location: index.php');

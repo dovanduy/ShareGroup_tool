@@ -37,6 +37,7 @@ if (isset($_POST['login'])) {
         $row = mysqli_fetch_assoc($query);
         if ($row['ip_address'] == null || $row['ip_address'] == $current_ip){
             $_SESSION['username'] = $user;
+            $_SESSION['name'] = $row['name'];
             $_SESSION['password'] = $pass;
             if ($user == 'admin' || $_SESSION['auth'] == 1) {
                 $_SESSION['auth'] = 1;

@@ -7,7 +7,7 @@
     <a class="logo-wrapper waves-effect" href="http://fb.com/QuangThienOfficial.VietNam" target="_blank">
         <img style="max-height: 100%;" src="<?php echo PATH; ?>/public/images/logoFB-removebg.png" class="img-fluid" alt="">
     </a>
-    <center><h4>Xin chào <b><h3><?php echo $_SESSION['username'] ?></h3></b></h4></center>
+    <center><h4>Xin chào <b><h3><?php if (isset($_SESSION['name'])){echo $_SESSION['name'];} ?></h3></b></h4></center>
     <div class="list-group list-group-flush" id="navbarSupportedContent">
         <a href="<?php echo PATH; ?>" class="list-group-item waves-effect <?php a("index.php"); ?>">
             <i class="fas fa-chart-pie mr-3"></i>Trang chủ
