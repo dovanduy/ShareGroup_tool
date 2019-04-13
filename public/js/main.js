@@ -13,16 +13,16 @@ btnGetToken.click(function () {
         var i = 1;
         btnGetToken.attr('disabled', 'disabled');
         var stt = 'Đang lấy token ';
-        var time = setInterval(function(){
+        var time = setInterval(function () {
             stt += '.'
-            if (i % 5 == 0){
+            if (i % 5 == 0) {
                 stt = 'Đang lấy token ';
             }
             btnGetToken.html(stt);
             i++;
         }, 1000);
 
-        for (i in arrCookie){
+        for (i in arrCookie) {
             promise.push(getToken(arrCookie[i]));
         }
 
@@ -30,7 +30,7 @@ btnGetToken.click(function () {
             clearInterval(time);
             btnGetToken.html("Lấy Token");
             btnGetToken.removeAttr('disabled');
-            alert("Hoàn thành\n"+count+" tài khoản đã lấy được token");
+            alert("Hoàn thành\n" + count + " tài khoản đã lấy được token");
         });
 
     } else {
@@ -46,15 +46,16 @@ btnShareGroup.click(function () {
     var mess = $('#inMessage').val().trim();
     var link = $('#inLink').val().trim();
     var limit = $('#inLimit').val().trim();
+    var withoutApproval = $('#chkOnlyWithoutApproval').is(':checked');
 
     if (listCookie.length != 0) {
 
         var i = 1;
         btnShareGroup.attr('disabled', 'disabled');
         var stt = 'Đang chia sẻ ';
-        var time = setInterval(function(){
+        var time = setInterval(function () {
             stt += '.'
-            if (i % 5 == 0){
+            if (i % 5 == 0) {
                 stt = 'Đang chia sẻ ';
             }
             btnShareGroup.html(stt);
@@ -63,15 +64,15 @@ btnShareGroup.click(function () {
 
         var arrCookie = listCookie.split('\n');
 
-        for (i in arrCookie){
-            promise.push(shareGroup(arrCookie[i], mess, link, limit));
+        for (i in arrCookie) {
+            promise.push(shareGroup(arrCookie[i], mess, link, limit, withoutApproval));
         }
 
         Promise.all(promise).then(function () {
             clearInterval(time);
             btnShareGroup.html("Chia sẻ");
             btnShareGroup.removeAttr('disabled');
-            alert("Hoàn thành\nĐã chia sẻ lên "+count+" group");
+            alert("Hoàn thành\nĐã chia sẻ lên " + count + " group");
         }, function () {
             clearInterval(time);
             btnShareGroup.html("Chia sẻ");
@@ -79,7 +80,7 @@ btnShareGroup.click(function () {
             alert("Hoàn thành");
         });
 
-    }else {
+    } else {
         alert("Danh sách cookie rỗng");
     }
 
@@ -99,7 +100,7 @@ function getToken(cookie) {
             }
         });
     }).then(function (res) {
-        if (res.token != false){
+        if (res.token != false) {
             var row = createTableRow([++count, res.uid, res.token]);
             var tblResult = $('#tblResult tbody')[0];
             tblResult.appendChild(row);
@@ -109,31 +110,35 @@ function getToken(cookie) {
     });
 }
 
-function shareGroup(cookie, mess, link, limit){
+function shareGroup(cookie, mess, link, limit, withoutApproval) {
     return new Promise(function (resolve, reject) {
         $.post(
-            "ajax.php",{
+            "ajax.php", {
                 request: "share_group",
-                cookie : cookie,
+                cookie: cookie,
                 message: mess,
                 link: link,
-                limit: limit
+                limit: limit,
+                without_approval: withoutApproval
             },
             function (res) {
                 try {
                     res = JSON.parse(res);
-                    resolve(res);
-                }catch (e) {
+                    if (res == null){
+                        reject();
+                    } else{
+                        resolve(res);
+                    }
+                } catch (e) {
                     reject();
                 }
             }
         );
     }).then(function (res) {
-        for (i in res){
-            var row = createTableRow([++count, res[i].id, res[i].name, res[i].viewer_post_status, res[i].visibility]);
-            var tblResult = $('#tblResult tbody')[0];
-            tblResult.appendChild(row);
-        }
+        count++;
+        var row = createTableRow([count, res.id, res.name, res.viewer_post_status, res.visibility]);
+        var tblResult = $('#tblResult tbody')[0];
+        tblResult.appendChild(row);
     }).catch(function (val) {
 
     });

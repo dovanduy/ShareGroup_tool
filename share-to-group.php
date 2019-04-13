@@ -49,6 +49,11 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] == 1){
                         <input id="inLimit" type="number" class="form-control">
                     </div>
 
+                    <div class="custom-control custom-checkbox non-select">
+                        <input type="checkbox" class="custom-control-input" id="chkOnlyWithoutApproval" checked>
+                        <label class="custom-control-label" for="chkOnlyWithoutApproval">Chỉ chia sẻ lên group không kiểm duyệt</label>
+                    </div>
+
                     <button id="btnShareGroup" class="btn btn-primary d-block mt-4">Chia sẻ</button>
                 </div>
 
