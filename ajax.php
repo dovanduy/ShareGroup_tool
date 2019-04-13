@@ -1,13 +1,9 @@
 <?php
 include_once "include/API.php";
-include_once "include/Logger.php";
-include_once "include/ProxyManager.php";
 
-set_time_limit(120);
+set_time_limit(240);
 
 $api = new API();
-$logger = new Logger("log.log");
-$proxyM = new ProxyManager();
 
 if (isset($_POST['request'])) {
 
@@ -36,31 +32,9 @@ if (isset($_POST['request'])) {
             $limit = json_decode($_POST['limit']);
             $without_approval = json_decode($_POST['without_approval']);
 
-            $proxys = $proxyM->getProxys();
+            $result = $api->shareOnMultipleGroups($cookie, $message, $link, $limit, $without_approval);
 
-            $proxy = $proxys[random_int(0, count($proxys) - 1)];
-
-            $FBData = $api->getToken($cookie, $proxy);
-
-            $list_groups = $api->getListGroups($FBData, $proxy);
-
-            $count = 0;
-
-//            foreach ($list_groups as $group) {
-//                if ($without_approval && $group['viewer_post_status'] != "CAN_POST_WITHOUT_APPROVAL") continue;
-//
-//                $res = $this->shareOnGroup($FBData, $group['id'], $message, $link, $proxy);
-//
-//                if ($res) {
-//                    $count++;
-//                    $logger->log($FBData->user_id . " => (" . $count . ") " . $group['id']);
-//                    echo json_encode($group);
-//                }
-//
-//                if ($limit != NULL && $count >= $limit) break;
-//            }
-
-        var_dump($list_groups);
+            echo json_encode($result);
 
             break;
     }

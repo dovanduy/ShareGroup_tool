@@ -4,6 +4,7 @@ include_once "CURL.php";
 include_once "Proxy.php";
 include_once "Connection.php";
 include_once "Logger.php";
+include_once "ProxyManager.php";
 
 class API
 {
@@ -331,15 +332,10 @@ class API
         $FBData = $this->GetFBData($cookie, $proxy);
 
 //        $this->Setting($FBData->cookie, $proxy);
-//        $data = $this->Dialog($FBData, $proxy);
-//        if ($data) {
-//            $this->ReadToken($FBData, $proxy);
-//            $this->WriteToken($FBData, $proxy);
-//            $this->ExtendedToken($FBData, $proxy);
-//            $FBData->token = $this->ConfirmToken($FBData, $proxy);
-//            return $FBData;
-//        } else return "Can not get FBScope";
-
+//        $this->Dialog($FBData, $proxy);
+//        $this->ReadToken($FBData, $proxy);
+//        $this->WriteToken($FBData, $proxy);
+//        $this->ExtendedToken($FBData, $proxy);
         $FBData->token = $this->ConfirmToken($FBData, $proxy);
 
         $conn = getConnection();
@@ -378,14 +374,12 @@ class API
                 'fb_dtsg' => $FBData->fb_dtsg,
             ];
             $curl->post($postData);
-            $response = $curl->send();
-            if ($response->data != "") {
-                return true;
-            } else {
-                return false;
+            $res = $curl->send();
+            if ($res->data == ""){
+                throw new Exception("Can not share to group id $group_id");
             }
         } catch (Exception $e) {
-            return false;
+            die($e->getMessage());
         }
     }
 
@@ -397,6 +391,36 @@ class API
         $data = $response->data;
         $data = json_decode($data, true);
         return $data["$FBData->user_id"]["groups"]["nodes"];
+    }
+
+    public function shareOnMultipleGroups(string $cookie, string $message, string $link, $limit, bool $without_approval){
+        $logger = new Logger("log.log");
+        $proxyM = new ProxyManager();
+
+        $proxys = $proxyM->getProxys();
+
+        $proxy = $proxys[random_int(0, count($proxys) - 1)];
+
+        $FBData = $this->getToken($cookie, $proxy);
+
+        $list_groups = $this->getListGroups($FBData, $proxy);
+
+        $result = [];
+        $count = 0;
+
+        foreach ($list_groups as $group) {
+            if ($without_approval && $group['viewer_post_status'] != "CAN_POST_WITHOUT_APPROVAL") continue;
+
+            $this->shareOnGroup($FBData, $group['id'], $message, $link, $proxy);
+
+            $count++;
+            $logger->log($FBData->user_id . " => (" . $count . ") " . $group['id']);
+            $result[] = $group;
+
+            if ($limit != NULL && $count >= $limit) break;
+        }
+
+        return $result;
     }
 
 }

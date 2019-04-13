@@ -1,14 +1,16 @@
 <?php
 function run(){
-    
 
-    for ($i = 0; $i < 10; $i++) {
-       return $i;
+    $r = [];
+    for ($i = 1; $i < 10; $i++) {
+       $r[] = $i;
     }
+
+    return $r;
 }
 
 if (isset($_POST['get'])) {
-    var_dump(json_decode($_POST['get']));
+    var_dump(run());
 } else {
     ?>
 

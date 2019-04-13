@@ -28,7 +28,21 @@ if (isset($_POST['option'])){
             mysqli_query($conn,"UPDATE `list_proxy` SET `proxy` = '".$_POST['proxy']."' WHERE id = '".$_POST['id']."' ");
             break;
         case "add_proxy":
-            mysqli_query($conn,"INSERT INTO list_proxy SET `proxy`='".$_POST['proxy']."'");
+            $list_proxy = $_POST['proxy'];
+            $proxys = explode("\n", $list_proxy);
+
+            $sql = "INSERT INTO list_proxy (proxy) VALUES ";
+
+            $max = count($proxys) - 1;
+            foreach ($proxys as $i => $proxy){
+                $sql .= "('$proxy'), ";
+
+                if ($i >= $max){
+                    $sql .= "('$proxy');";
+                }
+            }
+
+            mysqli_query($conn, $sql);
             break;
         case "del":
             mysqli_query($conn,"DELETE FROM `list_proxy` WHERE id = '".$_POST['id']."'");

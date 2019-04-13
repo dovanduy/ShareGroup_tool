@@ -3,3 +3,6 @@
 *.iml
 *.log
 *.idea
+config.php
+*.zip
+test.php

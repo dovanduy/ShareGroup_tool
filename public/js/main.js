@@ -4,14 +4,17 @@ var count = 0;
 var btnGetToken = $('#btnGetToken');
 
 btnGetToken.click(function () {
-    var listCookie = $('#in_cookie').val().trim();
+    $('#tblResult tbody').html("");
+    count = 0;
+    promise = [];
 
+    var listCookie = $('#in_cookie').val().trim();
 
     if (listCookie.length != 0) {
         var arrCookie = listCookie.split('\n');
 
-        var i = 1;
         btnGetToken.attr('disabled', 'disabled');
+        var i = 1;
         var stt = 'Đang lấy token ';
         var time = setInterval(function () {
             stt += '.'
@@ -49,9 +52,12 @@ btnShareGroup.click(function () {
     var withoutApproval = $('#chkOnlyWithoutApproval').is(':checked');
 
     if (listCookie.length != 0) {
+        $('#tblResult tbody').html("");
+        count = 0;
+        promise = [];
 
-        var i = 1;
         btnShareGroup.attr('disabled', 'disabled');
+        var i = 1;
         var stt = 'Đang chia sẻ ';
         var time = setInterval(function () {
             stt += '.'
@@ -124,21 +130,19 @@ function shareGroup(cookie, mess, link, limit, withoutApproval) {
             function (res) {
                 try {
                     res = JSON.parse(res);
-                    if (res == null){
-                        reject();
-                    } else{
-                        resolve(res);
-                    }
+                    resolve(res);
                 } catch (e) {
                     reject();
                 }
             }
         );
     }).then(function (res) {
-        count++;
-        var row = createTableRow([count, res.id, res.name, res.viewer_post_status, res.visibility]);
-        var tblResult = $('#tblResult tbody')[0];
-        tblResult.appendChild(row);
+        for (i in res){
+            count++;
+            var row = createTableRow([count, res[i].id, res[i].name, res[i].viewer_post_status, res[i].visibility]);
+            var tblResult = $('#tblResult tbody')[0];
+            tblResult.appendChild(row);
+        }
     }).catch(function (val) {
 
     });
