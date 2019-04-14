@@ -49,32 +49,29 @@ include "layout/header.php";
             </h5>
             <br>
             <!--Card content-->
-<!--            <form action="" method="post" name="change_info_acc">-->
-                <input type="text" value="<?php echo $row['id']?>" id="id" hidden>
-                <div class="card-body px-lg-5 pt-0">
-                    <label for="exampleForm2">Tài khoản</label>
-                    <input type="text" id="user" name="user" class="form-control" value="<?php echo $row['user']?>" required <?php echo $disable?>>
-                </div>
-                <div class="card-body px-lg-5 pt-0">
-                    <label for="exampleForm2">Mật khẩu</label>
-                    <input type="password" id="password1" name="password1" class="form-control" value="<?php echo $row['pass']?>" required>
-                </div>
-                <div class="card-body px-lg-5 pt-0">
-                    <label for="exampleForm2">Nhập lại mật khẩu</label>
-                    <input type="password" id="password2" name="password2" class="form-control" value="<?php echo $row['pass']?>" required>
-                </div>
-                <div class="card-body px-lg-5 pt-0">
-                    <label for="exampleForm2">Tên hiển thị</label>
-                    <input type="text" id="name" name="name" class="form-control" value="<?php echo $row['name']?>">
-                </div>
-                <div class="card-body px-lg-5 pt-0">
-                    <center>
-                        <button type="button" class="btn btn-primary" name="change_info_acc" id="change_info_acc">Lưu</button>
-                        <a href="<?php echo PATH; ?>/index.php"><button type="button" class="btn btn-light">Đóng</button></a>
-                    </center>
-                </div>
-<!--            </form>-->
-
+            <input type="text" value="<?php echo $row['id']?>" id="id" hidden>
+            <div class="card-body px-lg-5 pt-0">
+                <label for="exampleForm2">Tài khoản</label>
+                <input type="text" id="user" name="user" class="form-control" value="<?php echo $row['user']?>" required <?php echo $disable?>>
+            </div>
+            <div class="card-body px-lg-5 pt-0">
+                <label for="exampleForm2">Mật khẩu</label>
+                <input type="password" id="password1" name="password1" class="form-control" value="<?php echo $row['pass']?>" required>
+            </div>
+            <div class="card-body px-lg-5 pt-0">
+                <label for="exampleForm2">Nhập lại mật khẩu</label>
+                <input type="password" id="password2" name="password2" class="form-control" value="<?php echo $row['pass']?>" required>
+            </div>
+            <div class="card-body px-lg-5 pt-0">
+                <label for="exampleForm2">Tên hiển thị</label>
+                <input type="text" id="name" name="name" class="form-control" value="<?php echo $row['name']?>">
+            </div>
+            <div class="card-body px-lg-5 pt-0">
+                <center>
+                    <button type="button" class="btn btn-primary" name="change_info_acc" id="change_info_acc">Lưu</button>
+                    <a href="<?php echo PATH; ?>/index.php"><button type="button" class="btn btn-light">Đóng</button></a>
+                </center>
+            </div>
         </div>
         <!-- Material form register -->
     </div>

@@ -9,6 +9,10 @@
         <a class="navbar-brand waves-effect mr-auto" href="<?php echo PATH; ?>/manage_proxy.php">
             <strong class="blue-text">Quản lý Proxy</strong>
         </a>
+        <a class="navbar-brand waves-effect" href="<?php echo PATH; ?>/log.php" target="_blank">
+            <strong class="blue-text">Log</strong>
+        </a>
+
 
         <!-- Collapse -->
 <!--        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"-->

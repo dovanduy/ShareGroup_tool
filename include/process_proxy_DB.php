@@ -20,6 +20,7 @@ if (!isset($_SESSION['username']) || $_SESSION['auth'] != '1'){
 
 if (isset($_POST['option'])){
     $flag = $_POST['option'];
+
     switch ($flag){
         case "del_all":
             mysqli_query($conn,"DELETE FROM `list_proxy`");
@@ -36,7 +37,6 @@ if (isset($_POST['option'])){
             $max = count($proxys) - 1;
             foreach ($proxys as $i => $proxy){
                 $sql .= "('$proxy'), ";
-
                 if ($i >= $max){
                     $sql .= "('$proxy');";
                 }
@@ -46,6 +46,9 @@ if (isset($_POST['option'])){
             break;
         case "del":
             mysqli_query($conn,"DELETE FROM `list_proxy` WHERE id = '".$_POST['id']."'");
+            break;
+        case "clear_log":
+            file_put_contents("log.log", "");
             break;
     }
 }
