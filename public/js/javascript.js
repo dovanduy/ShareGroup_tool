@@ -282,18 +282,6 @@ $(document).ready(function(){
 
     });
 
-    $('button#btn_clear_log').click(function () {
-        $.post(
-            "include/process_proxy_DB.php",
-            {
-                option: 'clear_log',
-            },
-            // function(data, status){
-            //     location.reload();
-            // }
-        )
-    });
-
 });
 
 

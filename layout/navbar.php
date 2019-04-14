@@ -25,7 +25,7 @@
                 </li>
 
                 <li class="nav-item" style="margin-left: 15px ">
-                    <a class="navbar-brand waves-effect mr-auto" href="<?php echo PATH; ?>/log.php">
+                    <a class="navbar-brand waves-effect mr-auto" href="<?php echo PATH; ?>/log.php" target="_blank">
                         <strong class="blue-text">Xem Log</strong>
                     </a>
                 </li>
