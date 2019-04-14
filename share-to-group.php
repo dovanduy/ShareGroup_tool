@@ -10,6 +10,12 @@ $_SESSION['title'] = "Share Group";
 if (!isset($_SESSION['username'])) {
     header("location: login.php");
 }
+include_once "include/Connection.php";
+$conn = getConnection();
+$query = mysqli_query($conn,"SELECT * FROM `user` WHERE `user` = '".$_SESSION['username']."'");
+if (!$query){
+    include "logout.php";
+}
 
 ?>
 

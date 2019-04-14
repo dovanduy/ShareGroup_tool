@@ -1,4 +1,17 @@
 <?php
+include "config.php";
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (!isset($_SESSION['username'])) {
+    header("location: login.php");
+}
+include_once "include/Connection.php";
+$conn = getConnection();
+$query = mysqli_query($conn,"SELECT * FROM `user` WHERE `user` = '".$_SESSION['username']."'");
+if (!$query){
+    include "logout.php";
+}
 include_once "include/API.php";
 
 set_time_limit(240);

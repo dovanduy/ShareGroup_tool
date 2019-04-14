@@ -20,6 +20,9 @@ require_once "include/Connection.php";
 $conn = getConnection();
 if (isset($_SESSION['username'])){
     $query = mysqli_query($conn,"SELECT * FROM `user` WHERE `user` = '".$_SESSION['username']."'");
+    if (!$query){
+        include "logout.php";
+    }
     $row = mysqli_fetch_array($query);
 }
 include "layout/header.php";

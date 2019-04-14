@@ -45,6 +45,10 @@ if (isset($_POST['login'])) {
                 mysqli_query($conn,"UPDATE `user` SET `ip_address` = '".$current_ip."' WHERE `id` = '". $row['id']."'");
             }
             header('location: index.php');
+        }else{
+            echo '<script type="text/javascript">';
+            echo 'setTimeout(function () { swal("Đăng nhập thất bại","", "warning");';
+            echo '}, 100);</script>';
         }
     }
 }

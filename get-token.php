@@ -4,11 +4,17 @@ include_once "config.php";
 if (!isset($_SESSION)) {
     session_start();
 }
-
+include_once "include/Connection.php";
+$conn = getConnection();
 $_SESSION['title'] = "Get Access Token";
 
 if (!isset($_SESSION['username'])) {
     header("location: login.php");
+}
+$query = mysqli_query($conn,"SELECT * FROM `user` WHERE `user` = '".$_SESSION['username']."'");
+$result = mysqli_num_rows($query);
+if ($result==0){
+    include "logout.php";
 }
 ?>
 
@@ -16,8 +22,9 @@ if (!isset($_SESSION['username'])) {
 <header>
     <?php
     include "layout/header.php";
-if (isset($_SESSION['auth']) && $_SESSION['auth'] == 1){
-    include "layout/navbar.php";}
+    if (isset($_SESSION['auth']) && $_SESSION['auth'] == 1){
+        include "layout/navbar.php";
+    }
     include "layout/sidebar.php";
     ?>
 </header>
