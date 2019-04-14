@@ -39,7 +39,7 @@ if (isset($_POST['login'])) {
             $_SESSION['username'] = $user;
             $_SESSION['name'] = $row['name'];
             $_SESSION['password'] = $pass;
-            if ($user == 'admin' || $_SESSION['auth'] == 1) {
+            if ($user == 'admin' || $row['auth'] == 1) {
                 $_SESSION['auth'] = 1;
             }else{
                 mysqli_query($conn,"UPDATE `user` SET `ip_address` = '".$current_ip."' WHERE `id` = '". $row['id']."'");
@@ -104,7 +104,7 @@ if (isset($_POST['login'])) {
 <script type="text/javascript" src="<?php echo PATH; ?>/public/lib/mdb/js/jquery-3.3.1.min.js"></script>
 <script src="<?php echo PATH; ?>/public/lib/mdb/js/popper.min.js"></script>
 <script src="<?php echo PATH; ?>/public/lib/mdb/js/bootstrap.min.js"></script>
-<script src="<?php echo PATH; ?>/public/mdb/js/mdb.min.js"></script
+<script src="<?php echo PATH; ?>/public/lib/mdb/js/mdb.min.js"></script>
 <script type="text/babel" src="<?php echo PATH; ?>/public/js/main.js"></script>
 <script type="text/javascript" src="<?php echo PATH; ?>/public/lib/sweetalert.min.js"></script>
 <script type="text/javascript" src="<?php echo PATH; ?>/public/js/javascript.js"></script>
