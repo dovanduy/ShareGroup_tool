@@ -37,6 +37,7 @@ include "layout/header.php";
         <div class="main-content">
             <div class="py-5">
                 <button type="button" class="btn btn-icon waves-effect waves-light btn-danger" id="btn_del_all_proxy" title="Xoá" style="float: right"> Xoá Toàn Bộ</button>
+                <button type="button" class="btn btn-icon waves-effect waves-light btn-success" id="btn_see_list_proxy" title="Xem List" style="float: right" data-toggle="modal" data-target="#ModalSeeProxy"> Xem dạng danh sách</button>
                 <table class="table table-hover">
                     <thead class="black white-text">
                     <tr>
@@ -110,9 +111,37 @@ include "layout/header.php";
                         </div>
                     </div>
                 </div>
+
+                <!-- Modal See List -->
+                <div class="modal fade" id="ModalSeeProxy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="myModalLabel" >Xem List Proxy</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <?php
+                                    $query = mysqli_query($conn,"SELECT * FROM list_proxy");
+//                                    $row = mysqli_fetch_array($query);
+                                    ?>
+                                    <label for="exampleFormControlTextarea1">Danh sách Proxy</label>
+                                    <textarea class="form-control rounded-0" id="proxy" rows="10" disabled><?php while($row=mysqli_fetch_array($query)){echo $row['proxy']."&#13;&#10;";}?></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
+    <br><br>
     <!--Main layout-->
 
 <?php

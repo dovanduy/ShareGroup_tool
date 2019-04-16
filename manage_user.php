@@ -67,8 +67,8 @@ $_SESSION['title'] = "Quản lý Người Dùng";
                             <td><?php if($row['ip_address'] == null){echo "NULL";}else{echo $row['ip_address'];} ?></td>
 <!--                            <td>--><?php //echo $row['func'] ?><!--</td>-->
                             <td>
-                                <button type="button" class="btn btn-icon waves-effect waves-light btn-warning" id_user="<?php echo $row['id']?>" id="btn_change" title="Sửa"> <i class="fa fa-wrench"></i>
-                                    <button type="button" class="btn btn-icon waves-effect waves-light btn-danger" id_user="<?php echo $row['id']?>" id="btn_del" title="Xoá"> <i class="far fa-trash-alt"></i>
+                                <button type="button" class="btn btn-icon waves-effect waves-light btn-warning" id_user="<?php echo $row['id']?>" id="btn_change" title="Sửa"> <i class="fa fa-wrench"></i></button>
+                                <button type="button" class="btn btn-icon waves-effect waves-light btn-danger" id_user="<?php echo $row['id']?>" id="btn_del" title="Xoá"> <i class="far fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     <?php } ?>

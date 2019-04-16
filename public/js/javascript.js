@@ -33,6 +33,7 @@ $(document).ready(function(){
                 user: $('#user').val(),
                 pass: $('#pass').val(),
                 name: $('#name').val(),
+                auth: $('#auth').val(),
                 ip_address: $('#ip_address').val(),
             },
             function(data, status){
@@ -51,22 +52,14 @@ $(document).ready(function(){
                     text: "Đồng ý",
                     value: true,
                     visible: true,
-                    // className: "btn btn-success",
                 },
                 cancel: {
                     text: "Huỷ",
                     value: false,
                     visible: true,
-                    // className: "btn btn-danger m-l-10",
                     closeModal: true,
                 },
             },
-			// showCancelButton: true,
-			// confirmButtonText: 'Đồng ý',
-			// cancelButtonText: 'Huỷ',
-			// confirmButtonClass: 'btn btn-success',
-			// cancelButtonClass: 'btn btn-danger m-l-10',
-			// buttonsStyling: false
 		}).then(function(result){
 		    // console.log(result);
 		     if (result) {
@@ -99,9 +92,8 @@ $(document).ready(function(){
 				$('#noidungsua').html(data);
 			}
 		);
-
-
 	});
+
 
 	//============================== Proxy ==================================
 

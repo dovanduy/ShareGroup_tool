@@ -30,7 +30,7 @@ if ($browser == 'Internet Explorer') die(
         } ?></title>
     <link rel="icon" href="<?php echo PATH; ?>/public/images/favicon.ico">
     <link rel="stylesheet" href="<?php echo PATH; ?>/public/lib/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="<?php echo PATH; ?>/public/lib/mdb/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo PATH; ?>/public/lib/mdb/css/bootstrap.css">
     <link rel="stylesheet" href="<?php echo PATH; ?>/public/lib/mdb/css/mdb.min.css">
     <link rel="stylesheet" href="<?php echo PATH; ?>/public/css/style.css">
     <script>const PATH = "<?php echo PATH; ?>"; </script>

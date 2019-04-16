@@ -20,8 +20,8 @@ if ($_POST['type'] == 'up'){
 }
 if ($_POST['type'] == 'add'){
     $type = False;
-    $num_id = mysqli_query($conn,"SELECT MAX(id) AS `max-id` FROM `user`");
-    $num_id_2 = mysqli_fetch_array($num_id);
+//    $num_id = mysqli_query($conn,"SELECT MAX(id) AS `max-id` FROM `user`");
+//    $num_id_2 = mysqli_fetch_array($num_id);
 }
 
 ?>
@@ -37,7 +37,7 @@ if ($_POST['type'] == 'add'){
         <div class="input-group-addon">
           <span class="glyphicon glyphicon-barcode"></span>
         </div>
-        <input class="form-control" id="id_user" type="text" placeholder="Mã Người Dùng ..." value="<?php if($type){ echo $info["id"];}else{echo $num_id_2['max-id']+1;}?>" style="color:#000" disabled>
+        <input class="form-control" id="id_user" type="text" placeholder="Mã Người Dùng ..." value="<?php if($type){ echo $info["id"];}?>" style="color:#000" disabled>
         </div>
       </div>
     </div>
@@ -78,13 +78,13 @@ if ($_POST['type'] == 'add'){
     </div>
 
     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        Quyền (0: admin | 1: User)
+        Quyền (1: admin | 0: User)
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th-list"></span>
                 </div>
-                <input class="form-control" id="pass" type="text" placeholder="Phân quyền..." value="<?php if($type){  echo $info["auth"];}?>" autofocus="autofocus" >
+                <input class="form-control" id="auth" type="text" placeholder="Phân quyền..." value="<?php if($type){  echo $info["auth"];}?>" autofocus="autofocus" >
             </div>
         </div>
     </div>

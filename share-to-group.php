@@ -20,9 +20,10 @@ if (!$query){
 ?>
 
     <!--Main Navigation-->
+<?php
+        include "layout/header.php";?>
     <header>
         <?php
-        include "layout/header.php";
 if (isset($_SESSION['auth']) && $_SESSION['auth'] == 1){
         include "layout/navbar.php";}
         include "layout/sidebar.php";
