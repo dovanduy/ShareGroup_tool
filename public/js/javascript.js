@@ -220,8 +220,6 @@ $(document).ready(function(){
         });
     });
 
-
-
     //========== Change Info Acc ================
 
     $('#change_info_acc').click(function(){
@@ -274,7 +272,10 @@ $(document).ready(function(){
 
     });
 
+
+
 });
+
 
 
 function toolTag(){

@@ -130,7 +130,7 @@ include "layout/header.php";
 //                                    $row = mysqli_fetch_array($query);
                                     ?>
                                     <label for="exampleFormControlTextarea1">Danh sách Proxy</label>
-                                    <textarea class="form-control rounded-0" id="proxy" rows="10" disabled><?php while($row=mysqli_fetch_array($query)){echo $row['proxy']."&#13;&#10;";}?></textarea>
+                                    <textarea class="form-control rounded-0" id="proxy" rows="10" disabled><?php while($row=mysqli_fetch_array($query)){echo $row['proxy']."&#10;";}?></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">

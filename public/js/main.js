@@ -78,12 +78,15 @@ btnShareGroup.click(function () {
             clearInterval(time);
             btnShareGroup.html("Chia sẻ");
             btnShareGroup.removeAttr('disabled');
-            alert("Hoàn thành\nĐã chia sẻ lên " + count + " group");
+            swal({
+                text: "Hoàn thành\nĐã chia sẻ lên " + count + " group",
+                icon: 'info',
+            });
         }, function () {
             clearInterval(time);
             btnShareGroup.html("Chia sẻ");
             btnShareGroup.removeAttr('disabled');
-            alert("Hoàn thành");
+            swal({text:"Hoàn thành", icon:'sucess'});
         });
 
     } else {
@@ -91,6 +94,119 @@ btnShareGroup.click(function () {
     }
 
 });
+
+
+//=========== Change Birthday ==================
+
+var btnChangeBirthday = $('#btnChangeBirthday');
+
+btnChangeBirthday.click(function(){
+    var listCookie = $('#inCookie').val().trim();
+    var dob = $('#inBirthday').val();
+    var ck_dob = dob.split("/");
+    var ck_dob_2 = ck_dob[2];
+    // alert(ck_dob_2);
+    if (listCookie.length != 0) {
+        if (ck_dob_2 > 2000){
+            swal({
+                text: 'Năm sinh không được lớn hơn 2000',
+                icon: 'warning',
+                cancel: {
+                    text: 'Đóng',
+                    value: false,
+                },
+            })
+        } else{
+            $('#tblResult tbody').html("");
+            count = 0;
+            promise = [];
+
+            btnChangeBirthday.attr('disabled', 'disabled');
+            var i = 1;
+            var stt = 'Đang Đổi Birthday ';
+            var time = setInterval(function () {
+                stt += '.'
+                if (i % 5 == 0) {
+                    stt = 'Đang Đổi Birthday ';
+                }
+                btnChangeBirthday.html(stt);
+                i++;
+            }, 1000);
+
+            var arrCookie = listCookie.split('\n');
+
+            for (i in arrCookie) {
+                promise.push(changeBirth(arrCookie[i], dob));
+            }
+
+            Promise.all(promise).then(function () {
+                clearInterval(time);
+                btnChangeBirthday.html("Đổi Birthday");
+                btnChangeBirthday.removeAttr('disabled');
+                swal({
+                    text: 'Hoàn thành\nĐã Đổi Birthday - ' + count + ' account',
+                    icon: 'success',
+                    cancel: {
+                        text: 'Đóng',
+                        value: false,
+                    },
+                })
+            }, function () {
+                clearInterval(time);
+                btnChangeBirthday.html("Đổi Birthday");
+                btnChangeBirthday.removeAttr('disabled');
+                swal({
+                    text: 'Hoàn thành',
+                    icon: 'success',
+                    cancel: {
+                        text: 'Đóng',
+                        value: false,
+                    },
+                })
+            });
+        }
+    } else {
+        swal({
+            text: 'Danh sách cookie rỗng',
+            icon: 'warning',
+            cancel: {
+                text: 'Đóng',
+                value: false,
+            },
+        })
+    }
+
+});
+
+
+function changeBirth(cookie, dob) {
+    return new Promise(function (resolve, reject) {
+        $.post(
+            "ajax.php", {
+                request: "change_dob",
+                cookie: cookie,
+                dob: dob,
+            },
+            function (res) {
+                try {
+                    res = JSON.parse(res);
+                    resolve(res);
+                } catch (e) {
+                    reject();
+                }
+            });
+    }).then(function (res) {
+        if (res.token != false) {
+            var row = createTableRow([++count, res.uid]);
+            var tblResult = $('#tblResult tbody')[0];
+            tblResult.appendChild(row);
+        }
+    }).catch(function () {
+
+    });
+}
+
+
 
 function getToken(cookie) {
     return new Promise(function (resolve, reject) {

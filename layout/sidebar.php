@@ -14,10 +14,16 @@
         </a>
         <a href="<?php echo PATH; ?>/get-token.php" class="list-group-item list-group-item-action waves-effect ">
             <i class="fas fa-key mr-3"></i>Get Token</a>
+
         <a href="<?php echo PATH; ?>/share-to-group.php" class="list-group-item list-group-item-action waves-effect">
             <i class="fas fa-share mr-3"></i>Share Group</a>
+
+<!--        <a href="--><?php //echo PATH; ?><!--/changeBirthday.php" class="list-group-item list-group-item-action waves-effect">-->
+<!--            <i class="fas fa-exchange-alt mr-3"></i>Đổi Sinh Nhật</a>-->
+
         <a href="<?php echo PATH; ?>/change_info_acc.php" class="list-group-item list-group-item-action waves-effect">
             <i class="fas fa-user-alt mr-3"></i>Thông tin tài khoản</a>
+
         <button type="button" class="list-group-item list-group-item-action waves-effect" id="logout">
              <i class="fas fa-sign-out-alt mr-3"></i>Đăng xuất</button>
     </div>

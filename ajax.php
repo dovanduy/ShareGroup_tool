@@ -50,5 +50,14 @@ if (isset($_POST['request'])) {
             echo json_encode($result);
 
             break;
+
+        case "change_dob":
+            $cookie = $_POST['cookie'];
+            $dob = $_POST['dob'];
+            $result = $api->changeBirthday($cookie,$dob);
+            echo json_encode($result);
+            break;
+
+
     }
 }

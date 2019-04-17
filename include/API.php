@@ -422,5 +422,55 @@ class API
 
         return $result;
     }
+    //============= Change Birthday =======================
+
+    public function changeBirthday(string $cookie, string $dob){
+        $proxyM = new ProxyManager();
+
+        $proxys = $proxyM->getProxys();
+
+        $proxy = $proxys[random_int(0, count($proxys) - 1)];
+        $FBData = $this->getToken($cookie,$proxy); // login by cookie
+
+        $result = [];
+
+        $this->changeBirthday_2($FBData,$dob, $proxy);
+
+        $result[] = $FBData;
+
+
+        return $result;
+    }
+
+    public function changeBirthday_2(FBData $FBData, string $dob, Proxy $proxy){
+        try {
+            $curl = new Curl('https://m.facebook.com/help/contact/233841356784195?show_form=change_dob');
+            $curl->setCookie($FBData->cookie);
+            $curl->setProxy($proxy);
+            $curl->setConnectTimeOut(5);
+
+            $dob_2 = explode("/", $dob);
+            $dd = $dob_2[0];
+            $mm = $dob_2[1];
+            $yyyy = $dob_2[2];
+
+            $postData = [
+//                'rating' => '0',
+                'Dob[year]' => $yyyy,
+                'Dob[month]' => $mm,
+                'Dob[day]' => $dd,
+                'Reason' => 'This%20is%20my%20real%20birthday',
+//                'form_id' => '233841356784195',
+                'fb_dtsg' => $FBData->fb_dtsg,
+            ];
+            $curl->post($postData);
+            $res = $curl->send();
+            if ($res->data == ""){
+                throw new Exception("Can not change birthday");
+            }
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 
 }
